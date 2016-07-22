@@ -1,0 +1,69 @@
+body, html {
+  font-family: 'Helvetica Neue', 'Lucida Sans Unicode', 'Arial Unicode MS', sans-serif;
+  font-size: 20px;
+}
+#wrapper {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1260px;
+  min-width: 780px;
+}
+.h1 {
+  float: left;
+}
+.hd .logo {
+  margin: 0 0.2em 0 0.4em;
+  position: relative;
+  top: 4px;
+}
+.timestamp {
+  color:#ffffff;
+  text-align: right;
+}
+h2 {
+  font-size: 1.5em;
+  color: gray;
+  font-weight: 700;
+  margin: 5px;
+}
+.tbox	{
+  background: #fbfbfb;
+  border: 1px solid #dfdfdf;
+}
+#inputdiv {
+  position: relative;
+  height: 20%;
+  text-align: left;
+}
+#textbox {
+  font-size: 1em;
+  width: 95%;
+  height: 10em;
+}
+#htmldiv {
+  position: relative;
+  height: 20%;
+  text-align: left;
+}
+#htmlout {
+  font-family: 'Times New Roman', 'Lucida Sans Unicode', 'Arial Unicode MS', sans-serif;
+  font-size: 2em;
+  color: #9D9DFF;
+}
+#wif {
+  font-size: 0.5em;
+}
+#wof {
+  font-size: 0.5em;
+}
+#content {
+  overflow: hidden;
+  padding: 20px 0;
+  clear: left;
+}
+#main {
+  width: 100%;
+  height: 500px;
+  float: left;
+  background: #ffffff;
+}

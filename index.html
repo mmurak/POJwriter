@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+	<head>
+		<title>Pe̍h-ōe-jī Writer</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+		<link rel="shortcut icon" href="favicon.ico?v=2">
+		<link rel="stylesheet" href="xss.css">
+		<script src="conv.js"></script>
+		<script type="text/javascript" src="./dist/clipboard.min.js"></script>
+		<script type="text/javascript" src="./regulariseTonePosition.js"></script>
+		<script type="text/javascript">
+			function initialize() {
+				// Safari doesn't support clipboard copy, so all 'copy' buttons must be labeled 'select'
+				// Internet Explorer ＆ Edge doesn't support offline clipboard copy, so all 'copy' buttons must be disabled
+				var userAgent = window.navigator.userAgent.toLowerCase();
+				var appVersion = window.navigator.appVersion.toLowerCase();
+				if ((appVersion.indexOf('safari') > -1) && (appVersion.indexOf('chrome') == -1)) {
+					document.getElementById('inCopy').value = 
+					document.getElementById('outCopy').value = 'Select';
+				} else if (location.href.indexOf('file://') > -1) {
+					if ((userAgent.indexOf('msie') > -1) ||
+						(userAgent.indexOf('trident/7.0') > -1) ||
+						(userAgent.indexOf('edge') > -1)) {
+						document.getElementById('inCopy').disabled = 
+						document.getElementById('outCopy').disabled =  "disabled";
+						return;
+					}
+				}
+				var clipboard = new Clipboard('.btn');
+				clipboard.on('success', function(e) {
+					// alert('Success');
+				});
+				clipboard.on('error', function(e) {
+					// alert('Copy to clipboard is not supported in Safari - Use Apple+C');
+				});
+			}
+			function conv() {
+//				http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript/3561711#3561711
+				RegExp.escape = function(s) {
+					return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+				};
+
+				var output = document.getElementById('textbox').value;
+				output = regulariseDiacriticPosition(output);
+				for (t in typeIn) {
+					var re = new RegExp(RegExp.escape(typeIn[t]), 'g');
+					output = output.replace(re, pojOut[t]);
+				}
+				htmlOut(output);
+			}
+			function htmlOut(output) {
+				var htmlout = document.getElementById('htmlout');
+				htmlout.innerHTML = output.replace(/\n/g, '<br>');
+			}
+			function tboxClear() {
+				document.input.textbox.value='';
+				conv();
+				document.input.textbox.focus();
+			}
+
+			function writeInput() {
+				var content = document.getElementById('textbox').value;
+				var bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+				var blob = new Blob([ bom, content ], { 'type' : 'text/plain' });
+				if (window.navigator.msSaveBlob) { 
+					window.navigator.msSaveBlob(blob, 'keyInput.txt'); 
+					window.navigator.msSaveOrOpenBlob(blob, 'keyInput.txt'); 
+				} else {
+					document.getElementById('wif').href =
+						window.URL.createObjectURL(blob);
+				}
+			}
+
+			function writePOJ() {
+				var content = document.getElementById('htmlout').innerHTML.replace(/<br>/g, '\r\n');
+				var bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+				var blob = new Blob([ bom, content ], { 'type' : 'text/plain' });
+				if (window.navigator.msSaveBlob) { 
+					window.navigator.msSaveBlob(blob, 'POJoutput.txt'); 
+					window.navigator.msSaveOrOpenBlob(blob, 'POJoutput.txt'); 
+				} else {
+					document.getElementById('wof').href =
+						window.URL.createObjectURL(blob);
+				}
+			}
+
+		</script>
+	</head>
+	<body onLoad="document.input.textbox.focus(); initialize(); conv();">
+		<div id="wrapper">
+			<div id="header">
+				<div class="h1">Li2-ho2, peh8-oe7-ji7! ⇒ Lí-hó, pe̍h-ōe-jī! &nbsp; &nbsp; ^ ⇒ ⁿ &nbsp; &nbsp; ou ⇒ ơ</div>
+				<div class="timestamp">
+					<small>(2016-07-22)</small>
+				</div>
+			</div>
+			<div id="content">
+				<div id="inputdiv">
+					<h2>Input&nbsp;
+						<input type="button" class="btn" data-clipboard-target="#textbox" id="inCopy" value="Copy">
+						<input type="button" onClick="tboxClear();" value="Clear">
+						<a id="wif" href="#" download="keyInput.txt" onclick="writeInput()">Save type-ins</a>
+					</h2>
+					<form name="input">
+						<textarea name="textbox" class="tbox" spellcheck="false" id="textbox" accesskey='i' onkeyup="conv()" onpaste="setTimeout(conv, 10)"></textarea>
+					</form>
+				</div>
+				<div id="htmldiv">
+					<h2>Output&nbsp;<input type="button" class="btn" data-clipboard-target="#htmlout" id="outCopy" value="Copy">
+						<a id="wof" href="#" download="POJoutput.txt" onclick="writePOJ()">Save Pe̍h-ōe-jī</a>
+					</h2>
+					<div id="htmlout"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
