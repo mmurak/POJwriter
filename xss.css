@@ -6,7 +6,7 @@ body, html {
   width: 100%;
   margin: 0 auto;
   max-width: 1260px;
-  min-width: 780px;
+  min-width: 400px;
 }
 .h1 {
   float: left;
