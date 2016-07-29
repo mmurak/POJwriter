@@ -16,8 +16,8 @@ function regularise(syllable) {
 			tone = '';
 		}
 		if (body == '') {		// m or n
-			if (initial.match(/ng/i)) {
-				initial = initial.replace(/ng/i, 'n' + tone + 'g');
+			if (initial.match(/(n)(g)/i)) {
+				initial = initial.replace(/ng/i, RegExp.$1 + tone + RegExp.$2);
 			} else {
 				initial = initial.replace(/([mn])/i, '$&' + tone);
 			}
