@@ -16,7 +16,11 @@ function regularise(syllable) {
 			tone = '';
 		}
 		if (body == '') {		// m or n
-			initial = initial.replace(/([mn])/i, '$&' + tone);
+			if (initial.match(/ng/i)) {
+				initial = initial.replace(/ng/i, 'n' + tone + 'g');
+			} else {
+				initial = initial.replace(/([mn])/i, '$&' + tone);
+			}
 			rValue = initial + body;
 		} else if (body in dTable) {
 			var ch = body.split('');
